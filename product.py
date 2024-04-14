@@ -15,7 +15,7 @@ def binomial_AMO(clauses, variables):
             clauses.append([-variables[i], -variables[j]])
     return clauses
 
-def decompose(start, variables_length):
+def generate_matrix(start, variables_length):
     p = math.ceil(math.sqrt(variables_length))
     q = math.ceil(n / p)
     return [
@@ -55,7 +55,7 @@ def binary_AMO(clauses, variables):
 
 def at_most_one(clauses, variables):
     global new_variables_count
-    matrix = decompose(n ** 2 + new_variables_count + 1, len(variables))
+    matrix = generate_matrix(n ** 2 + new_variables_count + 1, len(variables))
     row = matrix[0]
     col = matrix[1]
     new_variables_count += len(row) + len(col)
@@ -91,7 +91,6 @@ def generate_clauses(n, variables):
     for col in range(n):
         exactly_one(clauses, [variables[row][col] for row in range(n)])
 
-
     # At most one queen in each diagonal
     for i in range(1, n):
         diagonal = []
@@ -122,7 +121,6 @@ def generate_clauses(n, variables):
             row += 1
             col += 1
         at_most_one(clauses, diagonal)
-
 
     for j in range(1, n - 1):
         diagonal = []
@@ -160,7 +158,7 @@ def print_solution(solution):
             print(" ".join("Q" if cell else "." for cell in row))
 
 
-n = 1024
+n = 128
 solution = solve_n_queens(n)
 print_solution(solution)
 print("Run time:  %s seconds" % (time.time() - start_time))
